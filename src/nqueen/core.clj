@@ -6,14 +6,12 @@
 ;; TODO add checks for rotation / reflection
 
 (defn allowed? [n i board]
-  (cond
-    (empty? board)                                                                                    true
-    (and
-     (apply = " " (map #(nth % i) board))
-     (apply = " " (map #(if (< (+ i %2) n) (nth % (+ i %2)) " ") board (range (count board) 0 -1)))
-     (apply = " " (map #(if (<= 0 (- i %2)) (nth % (- i %2)) " ") board (range (count board) 0 -1)))) true
-    :else                                                                                             false)
-  )
+  (or
+   (empty? board)
+   (and
+    (apply = " " (map #(nth % i) board))
+    (apply = " " (map #(if (< (+ i %2) n) (nth % (+ i %2)) " ") board (range (count board) 0 -1)))
+    (apply = " " (map #(if (<= 0 (- i %2)) (nth % (- i %2)) " ") board (range (count board) 0 -1))))))
 
 (defn possible-locations
   [n board]
@@ -32,17 +30,21 @@
                (nqueens* n new-board))))))
 
 (defn nqueens [n]
-  (nqueens* n [])
-  )
+  (nqueens* n []))
+
+(defn print-solution [s]
+  (doseq        [r (range (count s))]
+    (println "|" (clojure.string/join " " (nth s r)) "|")))
 
 (defn -main
   [& args]
   (doseq [n (range  9)]
     (println "================================")
-    (println "n=" n)
+    (print "n=" n)
     (let [s (nqueens n)]
+      (println " has " (count s) "solutions")
       (doseq        [i (range (count s))]
         (println "---------")
         (println "n=" n "solution " (inc i) "of" (count s))
-        (doseq        [r (range n)]
-          (println (nth (nth s i) r)))))))
+        (print-solution (nth s i))
+  ))))
