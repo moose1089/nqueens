@@ -1,4 +1,5 @@
 (ns nqueen.core
+  (:require [clojure.pprint])
   (:gen-class))
 
 
@@ -6,12 +7,12 @@
 
 (defn allowed? [n i board]
   (cond
-    (empty? board)                                                           true
+    (empty? board)                                                                                    true
     (and
      (apply = " " (map #(nth % i) board))
-     (apply = " " (map #(nth % (+ i %2)) board (range (count board) 0 -1)))
-     (apply = " " (map #(nth % (- i %2)) board (range (count board) 0 -1)))) true
-    :else                                                                    false)
+     (apply = " " (map #(if (< (+ i %2) n) (nth % (+ i %2)) " ") board (range (count board) 0 -1)))
+     (apply = " " (map #(if (<= 0 (- i %2)) (nth % (- i %2)) " ") board (range (count board) 0 -1)))) true
+    :else                                                                                             false)
   )
 
 (allowed? 3 0 [])
@@ -25,6 +26,9 @@
 (allowed? 3 2 [[" " "Q" " "]])
 (allowed? 3 2 [[" " " " "Q"]])
 
+(allowed? 3 0 [["Q" " " " "][" " " " "Q"]])
+(allowed? 3 0 [[" " "Q" " "]["Q" " " " "]])
+(allowed? 3 0 [[" " " " "Q"]["Q" " " " "]])
 
 (defn possible-locations
   [n board]
@@ -50,6 +54,9 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (doseq [i (range 4)]
-    (print i " = " (nqueens i)))
-  )
+  (doseq [n (range 4)]
+    (println "n=" n)
+    (let [s (nqueens n)]
+      (doseq        [i (range (count s))]
+        (println "n=" n "solution " (inc i) "of" (count s))
+        (clojure.pprint/pprint (nth s i))))))
