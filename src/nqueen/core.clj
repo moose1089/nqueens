@@ -1,5 +1,6 @@
 (ns nqueen.core
-  (:require [clojure.pprint])
+  (:require [clojure.pprint]
+            [clojure.tools.trace])
   (:gen-class))
 
 
@@ -15,33 +16,18 @@
     :else                                                                                             false)
   )
 
-(allowed? 3 0 [])
-(allowed? 3 0 [["Q" " " " "]])
-(allowed? 3 0 [[" " "Q" " "]])
-(allowed? 3 0 [[" " " " "Q"]])
-(allowed? 3 1 [["Q" " " " "]])
-(allowed? 3 1 [[" " "Q" " "]])
-(allowed? 3 1 [[" " " " "Q"]])
-(allowed? 3 2 [["Q" " " " "]])
-(allowed? 3 2 [[" " "Q" " "]])
-(allowed? 3 2 [[" " " " "Q"]])
-
-(allowed? 3 0 [["Q" " " " "][" " " " "Q"]])
-(allowed? 3 0 [[" " "Q" " "]["Q" " " " "]])
-(allowed? 3 0 [[" " " " "Q"]["Q" " " " "]])
-
 (defn possible-locations
   [n board]
-  (for [i (range  n)]
-    (let [col (concat (take i (repeat " ")) ["Q"] (take (- n i 1) (repeat " ")))]
-      col)))
-
-;;(possible-locations 3 [] )
+  (filter some?
+          (for [i (range  n)]
+            (when (allowed? n i board)
+              (let [col (concat (take i (repeat " ")) ["Q"] (take (- n i 1) (repeat " ")))]
+                col)))))
 
 (defn nqueens* [n board]
   (apply concat
          (for [i (possible-locations n board)]
-           (let [new-board (cons i board)]
+           (let [new-board (concat board (list i))]
              (if (= n (count new-board))
                [new-board]
                (nqueens* n new-board))))))
@@ -52,9 +38,8 @@
   )
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (doseq [n (range 3)]
+  (doseq [n (range  9)]
     (println "================================")
     (println "n=" n)
     (let [s (nqueens n)]
@@ -65,3 +50,5 @@
           (println (nth (nth s i) r))
 )
         ))))
+
+;(clojure.tools.trace/trace-ns 'nqueen.core)
