@@ -73,11 +73,11 @@
 
 (defn -main
   [& args]
-  (doseq [n (range 5 6 )]
+  (doseq [n (range 29)]
     (println "================================")
     (print "n=" n)
     (let [s (nqueens n)]
       (println " has " (count s) "solutions," (count (distinct-boards s)) "distinct")
-      (println "distinct solutions")
-      (print-all-solutions (distinct-boards s))
+      ;;(println "distinct solutions")
+      ;;(print-all-solutions (distinct-boards s))
     )))
