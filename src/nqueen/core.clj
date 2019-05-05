@@ -55,8 +55,13 @@
   "I don't do a whole lot ... yet."
   [& args]
   (doseq [n (range 4)]
+    (println "================================")
     (println "n=" n)
     (let [s (nqueens n)]
       (doseq        [i (range (count s))]
+        (println "---------")
         (println "n=" n "solution " (inc i) "of" (count s))
-        (clojure.pprint/pprint (nth s i))))))
+        (doseq        [r (range n)]
+          (println (nth (nth s i) r))
+          (clojure.pprint/pprint ))
+        ))))
