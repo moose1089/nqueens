@@ -3,8 +3,7 @@
             [clojure.tools.trace])
   (:gen-class))
 
-
-
+;; TODO add checks for rotation / reflection
 
 (defn allowed? [n i board]
   (cond
@@ -32,7 +31,6 @@
                [new-board]
                (nqueens* n new-board))))))
 
-
 (defn nqueens [n]
   (nqueens* n [])
   )
@@ -47,8 +45,4 @@
         (println "---------")
         (println "n=" n "solution " (inc i) "of" (count s))
         (doseq        [r (range n)]
-          (println (nth (nth s i) r))
-)
-        ))))
-
-;(clojure.tools.trace/trace-ns 'nqueen.core)
+          (println (nth (nth s i) r)))))))
