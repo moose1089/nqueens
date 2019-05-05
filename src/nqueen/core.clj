@@ -33,6 +33,15 @@
      (every? #(not (board-eq? % i)) s1) (distinct-boards (cons i s1) s2)
      :else (distinct-boards s1 s2))))
 
+(defn allowed? [n i board]
+  (or
+   (empty? board)
+   (and
+    (apply = " " (map #(nth % i) board))
+    (apply = " " (map #(if (< (+ i %2) n) (nth % (+ i %2)) " ") board (range (count board) 0 -1)))
+    (apply = " " (map #(if (<= 0 (- i %2)) (nth % (- i %2)) " ") board (range (count board) 0 -1))))))
+
+
 (defn possible-locations
   [n board]
   (filter some?
